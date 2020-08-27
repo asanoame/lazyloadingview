@@ -1,34 +1,47 @@
 package com.xiaoyu.lazyloadingview.viewimpl
 
+import android.util.Log
 import androidx.fragment.app.Fragment
+import com.xiaoyu.lazyloadingview.BuildConfig
 import com.xiaoyu.lazyloadingview.LazyLoadingView
 
 open class LazyLoadingFragment : Fragment(), LazyLoadingView {
 
-    private var isLoad = true
+    private var isLoadFinish = false
 
     override fun onResume() {
         super.onResume()
-        if (isLoad) {
+        if (isLoadData) {
+            log("${javaClass.simpleName} : onLoadStart")
             onLoadStart()
-            loadFinish()
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (isLoad) {
+    override fun onPause() {
+        super.onPause()
+        if (isLoadData) {
+            log("${javaClass.simpleName} : onLoadStop")
             onLoadStop()
         }
     }
 
-    override var isLoadData: Boolean = isLoad
+    override var isLoadData = !isLoadFinish
 
-    override fun onLoadStart() {}
+    override fun onLoadStart() {
 
-    override fun onLoadStop() {}
+    }
+
+    override fun onLoadStop() {
+
+    }
 
     override fun loadFinish() {
-        isLoad = false
+        isLoadFinish = true
+    }
+
+    private fun log(msg: String) {
+        if (BuildConfig.DEBUG) {
+            Log.e("LazyLoadingView", msg)
+        }
     }
 }

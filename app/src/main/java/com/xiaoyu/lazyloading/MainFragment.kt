@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyu.lazyloadingview.viewimpl.LazyLoadingFragment
 import kotlinx.android.synthetic.main.layout_viewpager.*
 
@@ -35,5 +36,22 @@ class MainFragment : LazyLoadingFragment() {
 
             override fun createFragment(position: Int) = fragment[position]
         }
+
+        tab_layout.addTab(tab_layout.newTab())
+        tab_layout.addTab(tab_layout.newTab())
+        tab_layout.addTab(tab_layout.newTab())
+
+        TabLayoutMediator(
+            tab_layout,
+            viewpager,
+            true,
+            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+                tab.text = when (position) {
+                    0 -> "Sub1"
+                    1 -> "Sub2"
+                    2 -> "Sub3"
+                    else -> "未知"
+                }
+            }).attach()
     }
 }

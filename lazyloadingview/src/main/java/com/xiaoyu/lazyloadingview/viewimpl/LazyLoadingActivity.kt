@@ -1,28 +1,31 @@
 package com.xiaoyu.lazyloadingview.viewimpl
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.xiaoyu.lazyloadingview.BuildConfig
 import com.xiaoyu.lazyloadingview.LazyLoadingView
 
 open class LazyLoadingActivity : AppCompatActivity(), LazyLoadingView {
 
-    private var isLoad = true
+    private var isLoadFinish = false
 
     override fun onResume() {
         super.onResume()
-        if (isLoad) {
+        if (isLoadData) {
+            log("${javaClass.simpleName} : onLoadStart")
             onLoadStart()
-            loadFinish()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (isLoad) {
+        if (isLoadData) {
+            log("${javaClass.simpleName} : onLoadStop")
             onLoadStop()
         }
     }
 
-    override var isLoadData = isLoad
+    override var isLoadData = !isLoadFinish
 
     override fun onLoadStart() {
 
@@ -33,6 +36,12 @@ open class LazyLoadingActivity : AppCompatActivity(), LazyLoadingView {
     }
 
     override fun loadFinish() {
-        isLoad = true
+        isLoadFinish = true
+    }
+
+    private fun log(msg: String) {
+        if (BuildConfig.DEBUG) {
+            Log.e("LazyLoadingView", msg)
+        }
     }
 }
